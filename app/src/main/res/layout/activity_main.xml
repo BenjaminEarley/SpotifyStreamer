@@ -1,8 +1,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_height="match_parent"
-    android:layout_width="match_parent">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
@@ -30,19 +30,19 @@
             android:id="@+id/searchArtistWrapper"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:focusableInTouchMode="true"
             android:gravity="center"
             android:paddingRight="14dp"
-            android:theme="@style/WhiteTheme"
-            android:focusableInTouchMode="true">
+            android:theme="@style/WhiteTheme">
 
             <android.support.v7.widget.AppCompatEditText
+                android:id="@+id/searchArtist"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Search Artist"
-                android:id="@+id/searchArtist"
-                android:textColor="#ffffff"
                 android:maxLines="1"
                 android:singleLine="true"
+                android:textColor="#ffffff"
                 />
 
         </android.support.design.widget.TextInputLayout>
@@ -50,8 +50,10 @@
     </android.support.v7.widget.Toolbar>
 
     <fragment  android:id="@+id/fragment"
-        android:name="com.benjaminearley.spotifystreamer.MainActivityFragment"
-        tools:layout="@layout/fragment_main" android:layout_width="match_parent"
-        android:layout_height="match_parent" android:layout_below="@+id/toolbar2" />
+        android:name="com.benjaminearley.spotifystreamer.ArtistSearchFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/toolbar2"
+        tools:layout="@layout/fragment_main" />
 
 </RelativeLayout>
