@@ -2,26 +2,22 @@ package com.benjaminearley.spotifystreamer;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ListView;
 
-import java.util.Arrays;
+import kaaes.spotify.webapi.android.SpotifyApi;
+import kaaes.spotify.webapi.android.SpotifyService;
+import kaaes.spotify.webapi.android.models.ArtistsPager;
+import retrofit.Callback;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
 
 
 public class ArtistSearchFragment extends Fragment {
 
-    Artist[] artists = {
-            new Artist("Maroon 5", R.drawable.ic_launcher),
-            new Artist("Maroon 5", R.drawable.ic_launcher),
-            new Artist("Maroon 5", R.drawable.ic_launcher),
-            new Artist("Maroon 5", R.drawable.ic_launcher),
-            new Artist("Maroon 5", R.drawable.ic_launcher),
-            new Artist("Maroon 5", R.drawable.ic_launcher),
-            new Artist("Maroon 5", R.drawable.ic_launcher)
-    };
     private ArtistArrayAdapter artistAdapter;
 
     public ArtistSearchFragment() {
@@ -31,7 +27,6 @@ public class ArtistSearchFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-
     }
 
     @Override
@@ -40,19 +35,34 @@ public class ArtistSearchFragment extends Fragment {
 
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
-        artistAdapter = new ArtistArrayAdapter(getActivity(), Arrays.asList(artists));
+        SpotifyApi api = new SpotifyApi();
+        SpotifyService spotify = api.getService();
+
+        spotify.searchArtists("Beyonce", new Callback<ArtistsPager>() {
+            @Override
+            public void success(ArtistsPager artists, Response response) {
+                Log.d("Album success", String.valueOf(artists.artists.items.get(0).name));
+
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+                Log.d("Album failure", error.toString());
+            }
+        });
 
         ListView artistListView = (ListView) rootView.findViewById(R.id.listview_artists);
+/*        artistAdapter = new ArtistArrayAdapter(getActivity(), null);
         artistListView.setAdapter(artistAdapter);
-
         artistListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Artist artist = (Artist) parent.getItemAtPosition(position);
 
-                openSongListFragment(artist.getName());
+                openSongListFragment(artist.name);
             }
-        });
+        });*/
+
 
 
         return rootView;
