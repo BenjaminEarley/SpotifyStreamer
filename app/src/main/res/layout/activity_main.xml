@@ -2,7 +2,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="#F5F5F5">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
@@ -15,45 +16,11 @@
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
         tools:ignore="UnusedAttribute" />
 
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar2"
-        android:layout_width="match_parent"
-        android:layout_height="72dp"
-        android:layout_below="@+id/toolbar"
-        android:background="@color/primary"
-        android:elevation="5dp"
-        android:minHeight="?attr/actionBarSize"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-        tools:ignore="UnusedAttribute" >
-
-        <android.support.design.widget.TextInputLayout
-            android:id="@+id/searchArtistWrapper"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:focusableInTouchMode="true"
-            android:gravity="center"
-            android:paddingRight="14dp"
-            android:theme="@style/WhiteTheme">
-
-            <android.support.v7.widget.AppCompatEditText
-                android:id="@+id/searchArtist"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Search Artist"
-                android:maxLines="1"
-                android:singleLine="true"
-                android:textColor="#ffffff"
-                />
-
-        </android.support.design.widget.TextInputLayout>
-
-    </android.support.v7.widget.Toolbar>
-
     <fragment  android:id="@+id/fragment"
         android:name="com.benjaminearley.spotifystreamer.ArtistSearchFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/toolbar2"
+        android:layout_below="@+id/toolbar"
         tools:layout="@layout/fragment_main" />
 
 </RelativeLayout>
