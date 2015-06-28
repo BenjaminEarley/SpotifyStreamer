@@ -2,10 +2,13 @@ package com.benjaminearley.spotifystreamer;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ListView;
 
 import kaaes.spotify.webapi.android.SpotifyApi;
@@ -19,6 +22,7 @@ import retrofit.client.Response;
 public class ArtistSearchFragment extends Fragment {
 
     private ArtistArrayAdapter artistAdapter;
+    private SpotifyService spotify;
 
     public ArtistSearchFragment() {
     }
@@ -27,6 +31,9 @@ public class ArtistSearchFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        SpotifyApi api = new SpotifyApi();
+        spotify = api.getService();
+
     }
 
     @Override
@@ -34,22 +41,6 @@ public class ArtistSearchFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
-
-        SpotifyApi api = new SpotifyApi();
-        SpotifyService spotify = api.getService();
-
-        spotify.searchArtists("Beyonce", new Callback<ArtistsPager>() {
-            @Override
-            public void success(ArtistsPager artists, Response response) {
-                Log.d("Album success", String.valueOf(artists.artists.items.get(0).name));
-
-            }
-
-            @Override
-            public void failure(RetrofitError error) {
-                Log.d("Album failure", error.toString());
-            }
-        });
 
         ListView artistListView = (ListView) rootView.findViewById(R.id.listview_artists);
 /*        artistAdapter = new ArtistArrayAdapter(getActivity(), null);
@@ -62,6 +53,39 @@ public class ArtistSearchFragment extends Fragment {
                 openSongListFragment(artist.name);
             }
         });*/
+
+        EditText searchArtistField = (EditText) rootView.findViewById(R.id.searchArtist);
+        searchArtistField.addTextChangedListener(new TextWatcher() {
+
+            public void afterTextChanged(Editable s) {
+            }
+
+            public void beforeTextChanged(CharSequence s, int start,
+                                          int count, int after) {
+
+            }
+
+            public void onTextChanged(CharSequence s, int start,
+                                      int before, int count) {
+                spotify.searchArtists(s.toString(), new Callback<ArtistsPager>() {
+                    @Override
+                    public void success(ArtistsPager artists, Response response) {
+                        try {
+                            Log.d("Album success", artists.artists.items.get(0).name);
+                        } catch (IndexOutOfBoundsException e) {
+
+                        }
+
+                    }
+
+                    @Override
+                    public void failure(RetrofitError error) {
+                        Log.d("Album failure", error.toString());
+                    }
+                });
+            }
+        });
+
 
 
 
