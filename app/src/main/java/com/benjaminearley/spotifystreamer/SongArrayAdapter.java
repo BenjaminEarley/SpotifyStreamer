@@ -8,23 +8,22 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
 import java.util.List;
 
-public class SongArrayAdapter extends ArrayAdapter<Song> {
-    private static final String LOG_TAG = ArtistArrayAdapter.class.getSimpleName();
+import kaaes.spotify.webapi.android.models.Track;
 
-    public SongArrayAdapter(Activity context, List<Song> songs) {
-        // Here, we initialize the ArrayAdapter's internal storage for the context and the list.
-        // the second argument is used when the ArrayAdapter is populating a single TextView.
-        // Because this is a custom adapter for two TextViews and an ImageView, the adapter is not
-        // going to use this second argument, so it can be any value. Here, we used 0.
-        super(context, 0, songs);
+public class SongArrayAdapter extends ArrayAdapter<Track> {
+
+    public SongArrayAdapter(Activity context, List<Track> tracks) {
+        super(context, 0, tracks);
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         // Gets the AndroidFlavor object from the ArrayAdapter at the appropriate position
-        Song song = getItem(position);
+        Track track = getItem(position);
 
         // Adapters recycle views to AdapterViews.
         // If this is a new View object we're getting, then inflate the layout.
@@ -35,13 +34,18 @@ public class SongArrayAdapter extends ArrayAdapter<Song> {
         }
 
         ImageView albumImageView = (ImageView) convertView.findViewById(R.id.album_image);
-        albumImageView.setImageResource(song.getCoverId());
+        if (track.album.images != null && !track.album.images.isEmpty()) {
+            Picasso.with(parent.getContext()).load(track.album.images.get((int) Math.floor(track.album.images.size() / 2)).url).into(albumImageView);
+        } else {
+            albumImageView.setImageResource(R.drawable.ic_launcher);
+        }
+
 
         TextView albumNameView = (TextView) convertView.findViewById(R.id.album_name);
-        albumNameView.setText(song.getAlbum());
+        albumNameView.setText(track.album.name);
 
         TextView trackNameView = (TextView) convertView.findViewById(R.id.track_name);
-        trackNameView.setText(song.getTrack());
+        trackNameView.setText(track.name);
 
         return convertView;
     }
