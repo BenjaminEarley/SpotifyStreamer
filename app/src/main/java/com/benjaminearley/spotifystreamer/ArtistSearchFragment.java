@@ -8,11 +8,15 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
 
+import java.util.List;
+
 import kaaes.spotify.webapi.android.SpotifyApi;
 import kaaes.spotify.webapi.android.SpotifyService;
+import kaaes.spotify.webapi.android.models.Artist;
 import kaaes.spotify.webapi.android.models.ArtistsPager;
 import retrofit.Callback;
 import retrofit.RetrofitError;
@@ -23,6 +27,7 @@ public class ArtistSearchFragment extends Fragment {
 
     private ArtistArrayAdapter artistAdapter;
     private SpotifyService spotify;
+    private ListView artistListView;
 
     public ArtistSearchFragment() {
     }
@@ -42,9 +47,7 @@ public class ArtistSearchFragment extends Fragment {
 
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
-        ListView artistListView = (ListView) rootView.findViewById(R.id.listview_artists);
-/*        artistAdapter = new ArtistArrayAdapter(getActivity(), null);
-        artistListView.setAdapter(artistAdapter);
+        artistListView = (ListView) rootView.findViewById(R.id.listview_artists);
         artistListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -52,7 +55,7 @@ public class ArtistSearchFragment extends Fragment {
 
                 openSongListFragment(artist.name);
             }
-        });*/
+        });
 
         EditText searchArtistField = (EditText) rootView.findViewById(R.id.searchArtist);
         searchArtistField.addTextChangedListener(new TextWatcher() {
@@ -71,7 +74,7 @@ public class ArtistSearchFragment extends Fragment {
                     @Override
                     public void success(ArtistsPager artists, Response response) {
                         try {
-                            Log.d("Album success", artists.artists.items.get(0).name);
+                            update(artists.artists.items);
                         } catch (IndexOutOfBoundsException e) {
 
                         }
@@ -86,10 +89,26 @@ public class ArtistSearchFragment extends Fragment {
             }
         });
 
-
-
-
         return rootView;
+    }
+
+    private void update(final List<Artist> artists) {
+
+        new Thread() {
+            public void run() {
+                getActivity().runOnUiThread(new Runnable() {
+
+                    @Override
+                    public void run() {
+                        artistAdapter = new ArtistArrayAdapter(getActivity(), artists);
+                        artistListView.setAdapter(artistAdapter);
+                    }
+                });
+
+            }
+
+        }.start();
+
     }
 
     private void openSongListFragment(String name) {
