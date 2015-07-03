@@ -115,7 +115,7 @@ public class ArtistSearchFragment extends Fragment {
 
     private void openSongListFragment(String name) {
 
-        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment, TopSongListFragment.newInstance(name)).addToBackStack(null).commit();
+        getActivity().getSupportFragmentManager().beginTransaction().add(R.id.fragment, TopSongListFragment.newInstance(name)).addToBackStack(null).commit();
     }
 
     void refineSearchToast() {
@@ -130,6 +130,7 @@ public class ArtistSearchFragment extends Fragment {
 
     private class DownloadArtistsTask extends AsyncTask<CharSequence, Void, Void> {
         protected Void doInBackground(CharSequence... artists) {
+
             spotify.searchArtists(artists[0].toString(), new Callback<ArtistsPager>() {
                 @Override
                 public void success(ArtistsPager artists, Response response) {
@@ -159,6 +160,7 @@ public class ArtistSearchFragment extends Fragment {
                                         if (artistShorts == null || artistShorts.isEmpty()) {
                                             refineSearchToast();
                                         }
+
                                         artistAdapter.notifyDataSetChanged();
                                     }
                                 });
