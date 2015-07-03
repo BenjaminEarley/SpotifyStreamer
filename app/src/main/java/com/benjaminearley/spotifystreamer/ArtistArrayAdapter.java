@@ -45,16 +45,16 @@ public class ArtistArrayAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         View v = convertView;
-        CompleteListViewHolder viewHolder;
+        ArtistListViewHolder viewHolder;
 
         if (convertView == null) {
             LayoutInflater li = (LayoutInflater) mContext
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             v = li.inflate(R.layout.artist_card, null);
-            viewHolder = new CompleteListViewHolder(v);
+            viewHolder = new ArtistListViewHolder(v);
             v.setTag(viewHolder);
         } else {
-            viewHolder = (CompleteListViewHolder) v.getTag();
+            viewHolder = (ArtistListViewHolder) v.getTag();
         }
         viewHolder.artistNameView.setText(mArtistShortList.get(position).getName());
         if (mArtistShortList.get(position).getAlbumUrl() != null) {
@@ -67,11 +67,11 @@ public class ArtistArrayAdapter extends BaseAdapter {
     }
 }
 
-class CompleteListViewHolder {
+class ArtistListViewHolder {
     public TextView artistNameView;
     public ImageView artistImageView;
 
-    public CompleteListViewHolder(View base) {
+    public ArtistListViewHolder(View base) {
         artistNameView = (TextView) base.findViewById(R.id.artist_name);
         artistImageView = (ImageView) base.findViewById(R.id.artist_image);
     }
