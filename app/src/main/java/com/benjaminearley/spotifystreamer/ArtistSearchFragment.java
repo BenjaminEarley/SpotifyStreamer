@@ -30,6 +30,7 @@ import retrofit.client.Response;
 @SuppressWarnings("unchecked")
 public class ArtistSearchFragment extends Fragment {
 
+    private static final String TAG = ArtistSearchFragment.class.getName();
     private static final String ARTIST_KEY = "ARTISTS";
 
     private ArtistArrayAdapter artistAdapter;
@@ -113,7 +114,7 @@ public class ArtistSearchFragment extends Fragment {
 
     private void openSongListFragment(String name) {
 
-        getActivity().getSupportFragmentManager().beginTransaction().add(R.id.fragment, TopSongListFragment.newInstance(name)).addToBackStack(null).commit();
+        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment, TopSongListFragment.newInstance(name)).addToBackStack(null).commit();
     }
 
     void refineSearchToast() {
@@ -129,7 +130,11 @@ public class ArtistSearchFragment extends Fragment {
             spotify.searchArtists(artists[0].toString(), new Callback<ArtistsPager>() {
                 @Override
                 public void success(ArtistsPager artists, Response response) {
-                    artistShorts.clear();
+                    if (artistShorts != null) {
+                        artistShorts.clear();
+                    } else {
+                        artistShorts = new ArrayList<>();
+                    }
                     for (Artist artist : artists.artists.items) {
 
                         if (artist.images != null && !artist.images.isEmpty()) {
@@ -144,15 +149,17 @@ public class ArtistSearchFragment extends Fragment {
 
                     new Thread() {
                         public void run() {
-                            getActivity().runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    if (artistShorts == null || artistShorts.isEmpty()) {
-                                        refineSearchToast();
+                            if (getActivity() != null) {
+                                getActivity().runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        if (artistShorts == null || artistShorts.isEmpty()) {
+                                            refineSearchToast();
+                                        }
+                                        artistAdapter.notifyDataSetChanged();
                                     }
-                                    artistAdapter.notifyDataSetChanged();
-                                }
-                            });
+                                });
+                            }
                         }
 
                     }.start();
@@ -161,7 +168,7 @@ public class ArtistSearchFragment extends Fragment {
 
                 @Override
                 public void failure(RetrofitError error) {
-                    Log.d("Album failure", error.toString());
+                    Log.e(TAG, error.toString());
                 }
             });
 

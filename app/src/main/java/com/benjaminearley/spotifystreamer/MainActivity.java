@@ -3,10 +3,13 @@ package com.benjaminearley.spotifystreamer;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 
 
 public class MainActivity extends AppCompatActivity {
+
+    private static final String TAG = ArtistSearchFragment.class.getName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -15,8 +18,15 @@ public class MainActivity extends AppCompatActivity {
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        try {
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+        } catch (NullPointerException e) {
+            Log.e(TAG, e.toString());
+        }
         getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+
+        if (savedInstanceState == null)
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment, new ArtistSearchFragment()).addToBackStack(null).commit();
 
     }
 

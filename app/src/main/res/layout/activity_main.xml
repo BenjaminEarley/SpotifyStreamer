@@ -15,8 +15,8 @@
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
         tools:ignore="UnusedAttribute" />
 
-    <fragment  android:id="@+id/fragment"
-        android:name="com.benjaminearley.spotifystreamer.ArtistSearchFragment"
+    <FrameLayout
+        android:id="@+id/fragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/toolbar"

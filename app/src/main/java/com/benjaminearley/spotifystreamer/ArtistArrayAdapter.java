@@ -28,7 +28,8 @@ public class ArtistArrayAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        return mArtistShortList.size();
+        if (mArtistShortList != null) return mArtistShortList.size();
+        else return 0;
     }
 
     @Override
