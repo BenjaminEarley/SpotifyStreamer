@@ -17,13 +17,10 @@ public class ArtistArrayAdapter extends BaseAdapter {
 
     private Activity mContext;
     private List<ArtistShort> mArtistShortList;
-    private LayoutInflater mLayoutInflater = null;
 
     public ArtistArrayAdapter(Activity context, List<ArtistShort> list) {
         mContext = context;
         mArtistShortList = list;
-        mLayoutInflater = (LayoutInflater) mContext
-                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
     @Override
