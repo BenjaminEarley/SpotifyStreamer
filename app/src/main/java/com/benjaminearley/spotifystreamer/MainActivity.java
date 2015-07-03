@@ -26,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(false);
 
         if (savedInstanceState == null)
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment, new ArtistSearchFragment()).addToBackStack(null).commit();
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment, new ArtistSearchFragment()).commit();
 
     }
 

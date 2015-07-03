@@ -37,6 +37,7 @@ public class ArtistSearchFragment extends Fragment {
     private SpotifyService spotify;
     private List<ArtistShort> artistShorts = new ArrayList<>();
     private DownloadArtistsTask mTask = new DownloadArtistsTask();
+    private Toast toast;
 
     public ArtistSearchFragment() {
     }
@@ -119,9 +120,11 @@ public class ArtistSearchFragment extends Fragment {
 
     void refineSearchToast() {
 
-        Toast toast = Toast.makeText(getActivity(), "Please Refine Search", Toast.LENGTH_LONG);
-        toast.setGravity(Gravity.CENTER, 0, 0);
-        toast.show();
+        if (toast == null || toast.getView().getWindowVisibility() != View.VISIBLE) {
+            toast = Toast.makeText(getActivity(), "Please Refine Search", Toast.LENGTH_LONG);
+            toast.setGravity(Gravity.CENTER, 0, 0);
+            toast.show();
+        }
 
     }
 

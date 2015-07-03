@@ -15,3 +15,28 @@
 #-keepclassmembers class fqcn.of.javascript.interface.for.webview {
 #   public *;
 #}
+
+-keepattributes Signature
+-keepattributes *Annotation*
+-keep class com.squareup.okhttp.** { *; }
+-keep interface com.squareup.okhttp.** { *; }
+-dontwarn com.squareup.okhttp.**
+
+-dontwarn org.jacoco.agent.**
+
+-dontwarn okio.**
+
+-dontwarn rx.**
+-dontwarn retrofit.**
+-keep class retrofit.** { *; }
+-keepclasseswithmembers class * {
+    @retrofit.http.* <methods>;
+}
+
+-keep class kaaes.spotify.webapi.android.** { *; }
+
+-keep class sun.misc.Unsafe { *; }
+#your package path where your gson models are stored
+-keep class com.example.models.** { *; }
+
+-dontwarn com.squareup.okhttp.**
