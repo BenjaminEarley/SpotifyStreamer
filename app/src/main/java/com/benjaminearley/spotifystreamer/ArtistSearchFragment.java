@@ -159,6 +159,8 @@ public class ArtistSearchFragment extends Fragment {
                                     public void run() {
                                         if (artistShorts == null || artistShorts.isEmpty()) {
                                             refineSearchToast();
+                                        } else {
+                                            if (toast != null) toast.cancel();
                                         }
 
                                         artistAdapter.notifyDataSetChanged();
