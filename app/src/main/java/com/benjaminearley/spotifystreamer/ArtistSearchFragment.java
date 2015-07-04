@@ -34,21 +34,11 @@ public class ArtistSearchFragment extends Fragment {
     private static final String ARTIST_KEY = "ARTISTS";
 
     private ArtistArrayAdapter artistAdapter;
-    private SpotifyService spotify;
     private List<ArtistShort> artistShorts = new ArrayList<>();
     private DownloadArtistsTask mTask = new DownloadArtistsTask();
     private Toast toast;
 
     public ArtistSearchFragment() {
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        SpotifyApi api = new SpotifyApi();
-        spotify = api.getService();
-
     }
 
     @Override
@@ -130,6 +120,9 @@ public class ArtistSearchFragment extends Fragment {
 
     private class DownloadArtistsTask extends AsyncTask<CharSequence, Void, Void> {
         protected Void doInBackground(CharSequence... artists) {
+
+            SpotifyApi api = new SpotifyApi();
+            SpotifyService spotify = api.getService();
 
             spotify.searchArtists(artists[0].toString(), new Callback<ArtistsPager>() {
                 @Override
