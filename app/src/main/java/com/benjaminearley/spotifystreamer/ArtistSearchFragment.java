@@ -127,45 +127,45 @@ public class ArtistSearchFragment extends Fragment {
             spotify.searchArtists(artists[0].toString(), new Callback<ArtistsPager>() {
                 @Override
                 public void success(ArtistsPager artists, Response response) {
-                    if (artistShorts != null) {
-                        artistShorts.clear();
-                    } else {
-                        artistShorts = new ArrayList<>();
-                    }
-                    for (Artist artist : artists.artists.items) {
-
-                        if (artist.images != null && !artist.images.isEmpty()) {
-                            artistShorts.add(new ArtistShort(artist.name, artist.images.get(artist.images.size() / 2).url));
-                        } else {
-                            artistShorts.add(new ArtistShort(artist.name, null));
-                        }
-
-                        if (isCancelled())
-                            break;
-                    }
-
-
                     if (!isCancelled()) {
-                        new Thread() {
-                            public void run() {
-                                if (getActivity() != null) {
-                                    getActivity().runOnUiThread(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            if (artistShorts == null || artistShorts.isEmpty()) {
-                                                refineSearchToast();
-                                            } else {
-                                                if (toast != null) toast.cancel();
-                                            }
+                        if (artistShorts != null) {
+                            artistShorts.clear();
+                        } else {
+                            artistShorts = new ArrayList<>();
+                        }
+                        for (Artist artist : artists.artists.items) {
 
-                                            artistAdapter.notifyDataSetChanged();
-                                        }
-                                    });
-                                }
+                            if (artist.images != null && !artist.images.isEmpty()) {
+                                artistShorts.add(new ArtistShort(artist.name, artist.images.get(artist.images.size() / 2).url));
+                            } else {
+                                artistShorts.add(new ArtistShort(artist.name, null));
                             }
 
-                        }.start();
+                        }
 
+
+                        if (!isCancelled()) {
+                            new Thread() {
+                                public void run() {
+                                    if (getActivity() != null) {
+                                        getActivity().runOnUiThread(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                if (artistShorts == null || artistShorts.isEmpty()) {
+                                                    refineSearchToast();
+                                                } else {
+                                                    if (toast != null) toast.cancel();
+                                                }
+
+                                                artistAdapter.notifyDataSetChanged();
+                                            }
+                                        });
+                                    }
+                                }
+
+                            }.start();
+
+                        }
                     }
                 }
 
