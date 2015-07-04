@@ -151,26 +151,29 @@ public class ArtistSearchFragment extends Fragment {
                             break;
                     }
 
-                    new Thread() {
-                        public void run() {
-                            if (getActivity() != null) {
-                                getActivity().runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        if (artistShorts == null || artistShorts.isEmpty()) {
-                                            refineSearchToast();
-                                        } else {
-                                            if (toast != null) toast.cancel();
+
+                    if (!isCancelled()) {
+                        new Thread() {
+                            public void run() {
+                                if (getActivity() != null) {
+                                    getActivity().runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            if (artistShorts == null || artistShorts.isEmpty()) {
+                                                refineSearchToast();
+                                            } else {
+                                                if (toast != null) toast.cancel();
+                                            }
+
+                                            artistAdapter.notifyDataSetChanged();
                                         }
-
-                                        artistAdapter.notifyDataSetChanged();
-                                    }
-                                });
+                                    });
+                                }
                             }
-                        }
 
-                    }.start();
+                        }.start();
 
+                    }
                 }
 
                 @Override
