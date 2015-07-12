@@ -10,6 +10,7 @@ import android.view.MenuItem;
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = ArtistSearchFragment.class.getName();
+    public boolean mTwoPane = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,6 +25,12 @@ public class MainActivity extends AppCompatActivity {
             Log.e(TAG, e.toString());
         }
         getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+
+        if (findViewById(R.id.fragment2) != null) {
+
+            mTwoPane = true;
+
+        }
 
         if (savedInstanceState == null)
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment, new ArtistSearchFragment()).commit();
@@ -41,6 +48,10 @@ public class MainActivity extends AppCompatActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    public boolean isTwoPane() {
+        return mTwoPane;
     }
 }
 

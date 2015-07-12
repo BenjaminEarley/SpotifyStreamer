@@ -13,6 +13,8 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import com.benjaminearley.spotifystreamer.model.TrackShort;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -72,13 +74,22 @@ public class TopSongListFragment extends Fragment {
 
         View rootView = inflater.inflate(R.layout.fragment_top_song_list, container, false);
 
-        try {
-            ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Top 10 Tracks");
-            if (getArguments() != null)
-                ((AppCompatActivity) getActivity()).getSupportActionBar().setSubtitle(artistName);
-            ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        } catch (NullPointerException e) {
-            Log.e(TAG, e.toString());
+        if (!((MainActivity) getActivity()).isTwoPane()) {
+            try {
+                ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Top 10 Tracks");
+                if (getArguments() != null)
+                    ((AppCompatActivity) getActivity()).getSupportActionBar().setSubtitle(artistName);
+                ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            } catch (NullPointerException e) {
+                Log.e(TAG, e.toString());
+            }
+        } else {
+            try {
+                if (getArguments() != null)
+                    ((AppCompatActivity) getActivity()).getSupportActionBar().setSubtitle(artistName);
+            } catch (NullPointerException e) {
+                Log.e(TAG, e.toString());
+            }
         }
 
 

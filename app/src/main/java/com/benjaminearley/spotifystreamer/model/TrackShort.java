@@ -1,4 +1,4 @@
-package com.benjaminearley.spotifystreamer;
+package com.benjaminearley.spotifystreamer.model;
 
 import java.io.Serializable;
 

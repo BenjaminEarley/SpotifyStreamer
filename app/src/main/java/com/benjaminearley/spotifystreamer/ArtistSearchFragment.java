@@ -15,6 +15,8 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.benjaminearley.spotifystreamer.model.ArtistShort;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -105,7 +107,12 @@ public class ArtistSearchFragment extends Fragment {
 
     private void openSongListFragment(String name) {
 
-        getActivity().getSupportFragmentManager().beginTransaction().add(R.id.fragment, TopSongListFragment.newInstance(name)).addToBackStack(null).commit();
+        if (((MainActivity) getActivity()).isTwoPane()) {
+            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment2, TopSongListFragment.newInstance(name)).addToBackStack(null).commit();
+        } else {
+            getActivity().getSupportFragmentManager().beginTransaction().add(R.id.fragment, TopSongListFragment.newInstance(name)).addToBackStack(null).commit();
+
+        }
     }
 
     void refineSearchToast() {

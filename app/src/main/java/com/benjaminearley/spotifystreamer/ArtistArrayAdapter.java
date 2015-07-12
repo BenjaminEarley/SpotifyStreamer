@@ -9,6 +9,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.benjaminearley.spotifystreamer.model.ArtistShort;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
