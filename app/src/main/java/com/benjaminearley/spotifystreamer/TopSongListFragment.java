@@ -4,6 +4,7 @@ package com.benjaminearley.spotifystreamer;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -29,7 +30,7 @@ import retrofit.client.Response;
 
 public class TopSongListFragment extends Fragment {
 
-    private static final String TAG = ArtistSearchFragment.class.getName();
+    private static final String TAG = TopSongListFragment.class.getName();
     private static final String ARTIST_NAME = "ARTIST_NAME";
     private static final String TRACKS_KEY = "TRACKS";
     private static final int MAX_TRACK_COUNT = 10;
@@ -98,7 +99,13 @@ public class TopSongListFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 TrackShort track = (TrackShort) parent.getItemAtPosition(position);
-
+                if (!((MainActivity) getActivity()).isTwoPane()) {
+                    getActivity().getSupportFragmentManager().beginTransaction().add(R.id.fragment, PlaySongFragment.newInstance(artistName)).addToBackStack(null).commit();
+                } else {
+                    FragmentManager fm = getActivity().getSupportFragmentManager();
+                    PlaySongFragment playSongFragment = PlaySongFragment.newInstance(artistName);
+                    playSongFragment.show(fm, "name");
+                }
             }
         });
 
