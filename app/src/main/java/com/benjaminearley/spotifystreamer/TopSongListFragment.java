@@ -5,6 +5,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -98,14 +99,7 @@ public class TopSongListFragment extends Fragment {
         artistListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                TrackShort track = (TrackShort) parent.getItemAtPosition(position);
-                if (!((MainActivity) getActivity()).isTwoPane()) {
-                    getActivity().getSupportFragmentManager().beginTransaction().add(R.id.fragment, PlaySongFragment.newInstance(artistName)).addToBackStack(null).commit();
-                } else {
-                    FragmentManager fm = getActivity().getSupportFragmentManager();
-                    PlaySongFragment playSongFragment = PlaySongFragment.newInstance(artistName);
-                    playSongFragment.show(fm, "name");
-                }
+                showDialog(position);
             }
         });
 
@@ -158,9 +152,9 @@ public class TopSongListFragment extends Fragment {
         for (Track track : tracks) {
 
             if (track.album.images != null && !track.album.images.isEmpty()) {
-                trackShorts.add(new TrackShort(track.album.name, track.name, track.album.images.get((int) Math.floor(track.album.images.size() / 2)).url));
+                trackShorts.add(new TrackShort(track.album.name, track.name, track.album.images.get((int) Math.floor(track.album.images.size() / 2)).url, track.preview_url));
             } else {
-                trackShorts.add(new TrackShort(track.album.name, track.name, null));
+                trackShorts.add(new TrackShort(track.album.name, track.name, null, track.preview_url));
             }
 
         }
@@ -193,6 +187,24 @@ public class TopSongListFragment extends Fragment {
             Log.e(TAG, e.toString());
         }
 
+    }
+
+    public void showDialog(int position) {
+        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+        PlaySongFragment newFragment = PlaySongFragment.newInstance(artistName, position, trackShorts);
+
+        if (((MainActivity) getActivity()).isTwoPane()) {
+            // The device is using a large layout, so show the fragment as a dialog
+            newFragment.show(fragmentManager, "dialog");
+        } else {
+            // The device is smaller, so show the fragment fullscreen
+            FragmentTransaction transaction = fragmentManager.beginTransaction();
+            // For a little polish, specify a transition animation
+            transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+
+            transaction.add(R.id.fragment, newFragment)
+                    .addToBackStack(null).commit();
+        }
     }
 
 
