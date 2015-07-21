@@ -1,5 +1,6 @@
 package com.benjaminearley.spotifystreamer;
 
+import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -7,12 +8,15 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.benjaminearley.spotifystreamer.model.ArtistShort;
@@ -39,8 +43,17 @@ public class ArtistSearchFragment extends Fragment {
     private List<ArtistShort> artistShorts = new ArrayList<>();
     private DownloadArtistsTask mTask = new DownloadArtistsTask();
     private Toast toast;
+    private InputMethodManager keyboard;
 
     public ArtistSearchFragment() {
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        keyboard = (InputMethodManager) getActivity().getSystemService(
+                Context.INPUT_METHOD_SERVICE);
     }
 
     @Override
@@ -68,6 +81,18 @@ public class ArtistSearchFragment extends Fragment {
         artistListView.setAdapter(artistAdapter);
 
         EditText searchArtistField = (EditText) rootView.findViewById(R.id.searchArtist);
+        searchArtistField.setOnEditorActionListener(new EditText.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                try {
+                    keyboard.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), 0);
+                } catch (NullPointerException e) {
+                    Log.e(TAG, e.toString());
+                }
+                return false;
+            }
+
+        });
         searchArtistField.addTextChangedListener(new TextWatcher() {
 
             public void afterTextChanged(Editable s) {
