@@ -200,6 +200,102 @@ public class PlaySongFragment extends DialogFragment {
         });
     }
 
+    private void postExecute() {
+
+        showPlayerView(true);
+
+        final Handler mHandler = new Handler();
+
+        getActivity().runOnUiThread(new Runnable() {
+
+            @Override
+            public void run() {
+
+                boolean exited = false;
+                if (mediaPlayer != null) {
+                    try {
+                        mSeekPosition = mediaPlayer.getCurrentPosition() / 100;
+                        trackSeekBar.setProgress(mSeekPosition);
+                    } catch (IllegalStateException ignored) {
+                        exited = true;
+                    }
+                }
+                if (!exited) mHandler.postDelayed(this, 100);
+            }
+        });
+
+        if (isPlaying)
+            play.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(getActivity(), R.drawable.ic_pause_black_48dp), null, null, null);
+        else
+            play.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(getActivity(), R.drawable.ic_play_arrow_black_48dp), null, null, null);
+        play.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mediaPlayback();
+            }
+        });
+
+        skipRight.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showPlayerView(false);
+                mediaPlayer.reset();
+                mSongPosition++;
+                new PlayMusicTask().execute();
+            }
+        });
+
+        skipLeft.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showPlayerView(false);
+                mediaPlayer.reset();
+                mSongPosition--;
+                new PlayMusicTask().execute();
+            }
+        });
+
+        trackSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                if (mediaPlayer != null && fromUser) {
+                    mediaPlayer.seekTo(progress * 100);
+                }
+            }
+        });
+
+        Picasso.with(getActivity()).load(mTrackShorts.get(mSongPosition).getAlbumUrl()).into(albumCover);
+        albumName.setText(mTrackShorts.get(mSongPosition).getAlbumName());
+        trackName.setText(mTrackShorts.get(mSongPosition).getSongName());
+
+        if (mSongPosition == 0) {
+            skipLeft.setVisibility(View.INVISIBLE);
+        } else {
+            if (skipLeft.getVisibility() == View.INVISIBLE) {
+                skipLeft.setVisibility(View.VISIBLE);
+            }
+        }
+
+        if (mSongPosition == 9) {
+            skipRight.setVisibility(View.INVISIBLE);
+        } else {
+            if (skipRight.getVisibility() == View.INVISIBLE) {
+                skipRight.setVisibility(View.VISIBLE);
+            }
+        }
+    }
+
     private class PlayMusicTask extends AsyncTask<Void, Void, Void> {
         protected Void doInBackground(Void... Voids) {
 
@@ -219,101 +315,13 @@ public class PlaySongFragment extends DialogFragment {
 
         protected void onPostExecute(Void Void) {
 
-            showPlayerView(true);
+            try {
+                postExecute();
+            } catch (IllegalStateException ignored) {
 
-            final Handler mHandler = new Handler();
-
-            getActivity().runOnUiThread(new Runnable() {
-
-                @Override
-                public void run() {
-
-                    boolean exited = false;
-                    if (mediaPlayer != null) {
-                        try {
-                            mSeekPosition = mediaPlayer.getCurrentPosition() / 100;
-                            trackSeekBar.setProgress(mSeekPosition);
-                        } catch (IllegalStateException ignored) {
-                            exited = true;
-                        }
-                    }
-                    if (!exited) mHandler.postDelayed(this, 100);
-                }
-            });
-
-            if (isPlaying)
-                play.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(getActivity(), R.drawable.ic_pause_black_48dp), null, null, null);
-            else
-                play.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(getActivity(), R.drawable.ic_play_arrow_black_48dp), null, null, null);
-            play.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    mediaPlayback();
-                }
-            });
-
-            skipRight.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    showPlayerView(false);
-                    mediaPlayer.reset();
-                    mSongPosition++;
-                    new PlayMusicTask().execute();
-                }
-            });
-
-            skipLeft.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    showPlayerView(false);
-                    mediaPlayer.reset();
-                    mSongPosition--;
-                    new PlayMusicTask().execute();
-                }
-            });
-
-            trackSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-
-                @Override
-                public void onStopTrackingTouch(SeekBar seekBar) {
-
-                }
-
-                @Override
-                public void onStartTrackingTouch(SeekBar seekBar) {
-
-                }
-
-                @Override
-                public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                    if (mediaPlayer != null && fromUser) {
-                        mediaPlayer.seekTo(progress * 100);
-                    }
-                }
-            });
-
-            Picasso.with(getActivity()).load(mTrackShorts.get(mSongPosition).getAlbumUrl()).into(albumCover);
-            albumName.setText(mTrackShorts.get(mSongPosition).getAlbumName());
-            trackName.setText(mTrackShorts.get(mSongPosition).getSongName());
-
-            if (mSongPosition == 0) {
-                skipLeft.setVisibility(View.INVISIBLE);
-            } else {
-                if (skipLeft.getVisibility() == View.INVISIBLE) {
-                    skipLeft.setVisibility(View.VISIBLE);
-                }
-            }
-
-            if (mSongPosition == 9) {
-                skipRight.setVisibility(View.INVISIBLE);
-            } else {
-                if (skipRight.getVisibility() == View.INVISIBLE) {
-                    skipRight.setVisibility(View.VISIBLE);
-                }
             }
         }
     }
-
 
 
 }

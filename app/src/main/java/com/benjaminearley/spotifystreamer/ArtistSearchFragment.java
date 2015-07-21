@@ -108,7 +108,7 @@ public class ArtistSearchFragment extends Fragment {
     private void openSongListFragment(String name) {
 
         if (((MainActivity) getActivity()).isTwoPane()) {
-            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment2, TopSongListFragment.newInstance(name)).addToBackStack(null).commit();
+            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment2, TopSongListFragment.newInstance(name)).commit();
         } else {
             getActivity().getSupportFragmentManager().beginTransaction().add(R.id.fragment, TopSongListFragment.newInstance(name)).addToBackStack(null).commit();
 
