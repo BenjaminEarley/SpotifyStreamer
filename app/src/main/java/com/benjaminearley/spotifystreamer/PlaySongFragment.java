@@ -37,6 +37,7 @@ public class PlaySongFragment extends DialogFragment {
     private static final String LIST_TRACKS = "ListTracks";
     private static final String SONG_POSITION = "SongPosition";
     private static final String SEEK_POSITION = "SeekPosition";
+    private static final String IS_PLAYING = "IsPlaying";
 
     private String mArtistName;
     private int mStartingPosition;
@@ -54,6 +55,7 @@ public class PlaySongFragment extends DialogFragment {
     private ProgressBar progressBar;
     private int mSongPosition;
     private int mSeekPosition;
+    private boolean isPlaying = true;
 
 
     public PlaySongFragment() {
@@ -125,6 +127,7 @@ public class PlaySongFragment extends DialogFragment {
         } else {
             mSongPosition = savedInstanceState.getInt(SONG_POSITION);
             mSeekPosition = savedInstanceState.getInt(SEEK_POSITION);
+            isPlaying = savedInstanceState.getBoolean(IS_PLAYING);
             new PlayMusicTask().execute();
         }
 
@@ -138,15 +141,18 @@ public class PlaySongFragment extends DialogFragment {
 
         savedState.putInt(SONG_POSITION, mSongPosition);
         savedState.putInt(SEEK_POSITION, mSeekPosition);
+        savedState.putBoolean(IS_PLAYING, isPlaying);
     }
 
     private void mediaPlayback() {
 
         if (!mediaPlayer.isPlaying()) {
             mediaPlayer.start();
+            isPlaying = true;
             play.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(getActivity(), R.drawable.ic_pause_black_48dp), null, null, null);
         } else {
             mediaPlayer.pause();
+            isPlaying = false;
             play.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(getActivity(), R.drawable.ic_play_arrow_black_48dp), null, null, null);
         }
 
@@ -204,7 +210,7 @@ public class PlaySongFragment extends DialogFragment {
                 e.printStackTrace();
             }
 
-            mediaPlayer.start();
+            if (isPlaying) mediaPlayer.start();
             mediaPlayer.seekTo(mSeekPosition * 100);
             mediaPlayer.setLooping(true);
 
@@ -235,7 +241,10 @@ public class PlaySongFragment extends DialogFragment {
                 }
             });
 
-            play.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(getActivity(), R.drawable.ic_pause_black_48dp), null, null, null);
+            if (isPlaying)
+                play.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(getActivity(), R.drawable.ic_pause_black_48dp), null, null, null);
+            else
+                play.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(getActivity(), R.drawable.ic_play_arrow_black_48dp), null, null, null);
             play.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
