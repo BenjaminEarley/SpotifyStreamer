@@ -8,10 +8,12 @@
 
 
     <LinearLayout
+        android:id="@+id/playSongView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:visibility="invisible">
 
         <ScrollView
             android:layout_width="match_parent"
@@ -57,7 +59,8 @@
                     android:id="@+id/trackSeekBar"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal" />
+                    android:layout_gravity="center_horizontal"
+                    android:max="300" />
 
                 <LinearLayout
                     style="?android:attr/buttonBarStyle"
@@ -97,5 +100,12 @@
             </LinearLayout>
         </ScrollView>
     </LinearLayout>
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center" />
 
 </FrameLayout>
