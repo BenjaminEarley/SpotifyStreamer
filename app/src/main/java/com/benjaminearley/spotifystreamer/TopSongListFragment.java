@@ -110,7 +110,7 @@ public class TopSongListFragment extends Fragment {
                     if (tracks.tracks.items.size() <= MAX_TRACK_COUNT) {
                         update(tracks.tracks.items);
                     } else {
-                        update(tracks.tracks.items.subList(0, 10));
+                        update(tracks.tracks.items.subList(0, MAX_TRACK_COUNT));
                     }
                 }
 
