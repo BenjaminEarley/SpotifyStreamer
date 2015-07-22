@@ -38,6 +38,7 @@ public class PlaySongFragment extends DialogFragment {
     private static final String SONG_POSITION = "SongPosition";
     private static final String SEEK_POSITION = "SeekPosition";
     private static final String IS_PLAYING = "IsPlaying";
+    private static final int SEEK_TIME_DELAY = 100;
 
     private String mArtistName;
     private int mStartingPosition;
@@ -214,13 +215,13 @@ public class PlaySongFragment extends DialogFragment {
                 boolean exited = false;
                 if (mediaPlayer != null) {
                     try {
-                        mSeekPosition = mediaPlayer.getCurrentPosition() / 100;
+                        mSeekPosition = mediaPlayer.getCurrentPosition() / SEEK_TIME_DELAY;
                         trackSeekBar.setProgress(mSeekPosition);
                     } catch (IllegalStateException ignored) {
                         exited = true;
                     }
                 }
-                if (!exited) mHandler.postDelayed(this, 100);
+                if (!exited) mHandler.postDelayed(this, SEEK_TIME_DELAY);
             }
         });
 
@@ -270,7 +271,7 @@ public class PlaySongFragment extends DialogFragment {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 if (mediaPlayer != null && fromUser) {
-                    mediaPlayer.seekTo(progress * 100);
+                    mediaPlayer.seekTo(progress * SEEK_TIME_DELAY);
                 }
             }
         });
@@ -287,7 +288,7 @@ public class PlaySongFragment extends DialogFragment {
             }
         }
 
-        if (mSongPosition == 9) {
+        if (mSongPosition == mTrackShorts.size() - 1) {
             skipRight.setVisibility(View.INVISIBLE);
         } else {
             if (skipRight.getVisibility() == View.INVISIBLE) {
@@ -307,7 +308,7 @@ public class PlaySongFragment extends DialogFragment {
             }
 
             if (isPlaying) mediaPlayer.start();
-            mediaPlayer.seekTo(mSeekPosition * 100);
+            mediaPlayer.seekTo(mSeekPosition * SEEK_TIME_DELAY);
             mediaPlayer.setLooping(true);
 
             return null;
