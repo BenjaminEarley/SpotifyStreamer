@@ -105,13 +105,13 @@ public class PlaySongFragment extends DialogFragment {
             } catch (NullPointerException e) {
                 Log.e(TAG, e.toString());
             }
-        }
-        if (((MainActivity) getActivity()).isTwoPane())
+        } else {
             try {
                 getDialog().getWindow().requestFeature(Window.FEATURE_NO_TITLE);
             } catch (NullPointerException ignored) {
 
             }
+        }
 
         albumCover = (ImageView) view.findViewById(R.id.album_cover);
         artistName = (TextView) view.findViewById(R.id.artist);
@@ -159,6 +159,14 @@ public class PlaySongFragment extends DialogFragment {
             play.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(getActivity(), R.drawable.ic_play_arrow_black_48dp), null, null, null);
         }
 
+    }
+
+    @Override
+    public void onDestroyView() {
+        if (getDialog() != null) {
+            getDialog().setDismissMessage(null);
+        }
+        super.onDestroyView();
     }
 
 
