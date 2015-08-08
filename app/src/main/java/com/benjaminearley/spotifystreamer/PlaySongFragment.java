@@ -82,6 +82,8 @@ public class PlaySongFragment extends DialogFragment {
             mTrackShorts = (List<TrackShort>) getArguments().getSerializable(LIST_TRACKS);
         }
 
+        setRetainInstance(true);
+
         mSongPosition = mStartingPosition;
 
         mediaPlayer = new MediaPlayer();
@@ -129,7 +131,7 @@ public class PlaySongFragment extends DialogFragment {
             mSongPosition = savedInstanceState.getInt(SONG_POSITION);
             mSeekPosition = savedInstanceState.getInt(SEEK_POSITION);
             isPlaying = savedInstanceState.getBoolean(IS_PLAYING);
-            new PlayMusicTask().execute();
+            postExecute();
         }
 
 
