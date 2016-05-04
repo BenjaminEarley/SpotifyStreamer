@@ -179,7 +179,7 @@ public class TopSongListFragment extends Fragment {
         super.onDestroy();
 
         try {
-        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Spotify Streamer");
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Music Sampler");
         ((AppCompatActivity) getActivity()).getSupportActionBar().setSubtitle(null);
         ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         } catch (NullPointerException e) {

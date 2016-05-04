@@ -98,7 +98,7 @@ public class PlaySongFragment extends DialogFragment {
 
         if (!((MainActivity) getActivity()).isTwoPane()) {
             try {
-                ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Spotify Streamer");
+                ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Music Sampler");
                 if (getArguments() != null)
                     ((AppCompatActivity) getActivity()).getSupportActionBar().setSubtitle(null);
                 ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
